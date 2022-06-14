@@ -7,7 +7,8 @@
         <entry key="app/src/main/res/layout/activity_feed.xml" value="0.17760416666666667" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login2.xml" value="0.1702127659574468" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.18839779005524862" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_post_details.xml" value="0.28209181672533956" />
         <entry key="app/src/main/res/layout/item_post.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.15460052490234377" />
         <entry key="app/src/main/res/xml/fileprovider.xml" value="0.1" />
@@ -19,5 +20,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.17760416666666667" />
+      </ProjectState>
+    </option>
   </component>
 </project>
