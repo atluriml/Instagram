@@ -9,12 +9,24 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_weight="1"
+        android:fontFamily="cursive"
+        android:gravity="center"
+        android:text="Instagram"
+        android:textColor="#000000"
+        android:textSize="70dp" />
+
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
+        android:layout_marginTop="30dp"
         android:hint="@string/username"
         android:inputType="textMultiLine" />
 
@@ -32,21 +44,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="@string/login_label" />
+        android:text="@string/login_label"
+        app:backgroundTint="#5BBCFB"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:layout_marginTop="195dp"
         android:gravity="center"
-        android:text="Don't have an account?" />
+        android:text="Don't have an account?"
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-
-        android:text="SignUp for an Account" />
+        android:layout_marginTop="-15dp"
+        android:outlineProvider="none"
+        android:text="SignUp"
+        android:textAllCaps="false"
+        android:textColor="#5BBCFB"
+        app:backgroundTint="#00FFFFFF" />
 
 </LinearLayout>
