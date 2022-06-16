@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,10 +8,17 @@
     android:layout_margin="16dp"
     tools:context=".PostDetailsActivity">
 
+    <ImageView
+        android:id="@+id/ivProfileImageDetail"
+        android:layout_width="49dp"
+        android:layout_height="46dp"
+        tools:srcCompat="@drawable/instagram_user_outline_24" />
+
     <TextView
         android:id="@+id/tvDetailUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/ivProfileImageDetail"
         android:ems="10"
         tools:text="megana" />
 
@@ -19,13 +26,15 @@
         android:id="@+id/tvDetailComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ivDetailMedia"
         android:ems="10"
         tools:text="This is my post comment" />
 
     <ImageView
         android:id="@+id/ivDetailMedia"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
+        android:layout_below="@id/ivProfileImageDetail"
         android:ems="10"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -33,7 +42,8 @@
         android:id="@+id/tvDetailTimeStamp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/tvDetailComment"
         android:ems="10"
         tools:text="4:50 PM" />
 
-</LinearLayout>
+</RelativeLayout>

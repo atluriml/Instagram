@@ -19,26 +19,25 @@ import org.parceler.Parcels;
 
 import java.util.List;
 
-public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
-
-    public static final String TAG = "PostsAdapter";
+public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
+    public static final String TAG = "ProfileAdapter";
     private Context context;
     private List<Post> posts;
 
-    public PostsAdapter(Context context, List<Post> posts) {
+    public ProfileAdapter(Context context, List<Post> posts) {
         this.context = context;
         this.posts = posts;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
-        return new ViewHolder(view);
+    public ProfileAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.profile_post, parent, false);
+        return new ProfileAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ProfileAdapter.ViewHolder holder, int position) {
         Post post = posts.get(position);
         holder.bind(post);
     }
@@ -50,36 +49,20 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView tvUsername;
-        public ImageView ivImage;
-        public TextView tvDescription;
-        public ImageView ivProfileImage;
+        public ImageView ivPostImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvUsername = itemView.findViewById(R.id.tvUsername);
-            ivImage = itemView.findViewById(R.id.ivImage);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
+            ivPostImage = itemView.findViewById(R.id.ivProfilePost);
 
             itemView.setOnClickListener(this);
-
         }
 
         public void bind(Post post) {
             // Bind the post data to the view elements
-            tvDescription.setText(post.getDescription());
-            tvUsername.setText(post.getUser().getUsername());
             ParseFile image = post.getImage();
-            ParseFile profileImage = post.getUser().getParseFile("profileImage");
             if (image != null) {
-                Glide.with(context).load(image.getUrl()).into(ivImage);
-            }
-            if (profileImage == null){
-                Glide.with(context).load(R.drawable.instagram_user_outline_24).into(ivProfileImage);
-            }
-            else  {
-                Glide.with(context).load(profileImage.getUrl()).into(ivProfileImage);
+                Glide.with(context).load(image.getUrl()).into(ivPostImage);
             }
         }
 
@@ -100,5 +83,4 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         posts.clear();
         notifyDataSetChanged();
     }
-
 }

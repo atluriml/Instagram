@@ -32,8 +32,8 @@ public class PostsFragment extends Fragment {
     public static final String TAG = "PostsFragment";
     private SwipeRefreshLayout swipeContainer;
     private RecyclerView rvPosts;
-    protected PostsAdapter adapter;
-    protected List<Post> allPosts;
+    private PostsAdapter adapter;
+    private List<Post> allPosts;
 
     public PostsFragment() {
         // Required empty public constructor

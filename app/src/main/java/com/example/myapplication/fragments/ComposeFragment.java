@@ -43,7 +43,6 @@ public class ComposeFragment extends Fragment {
 
     private EditText etDescription;
     private Button btnCaptureImage;
-    private Button btnFeed;
     private ImageView ivPostImage;
     private Button btnSubmit;
     private File photoFile;
@@ -93,6 +92,7 @@ public class ComposeFragment extends Fragment {
         });
 
     }
+
     private void launchCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Create a File reference for future access

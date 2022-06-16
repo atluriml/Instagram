@@ -24,6 +24,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     TextView tvDetailComment;
     TextView tvDetailTimeStamp;
     ImageView ivDetailMedia;
+    ImageView ivProfileImageMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDetailTimeStamp = findViewById(R.id.tvDetailTimeStamp);
         tvDetailComment = findViewById(R.id.tvDetailComment);
         ivDetailMedia = findViewById(R.id.ivDetailMedia);
+        ivProfileImageMedia = findViewById(R.id.ivProfileImageDetail);
 
         post = Parcels.unwrap(getIntent().getParcelableExtra(Post.class.getSimpleName()));
         Log.d(TAG, String.format("Showing details for '%s'", post.getDescription()));
@@ -48,6 +50,14 @@ public class PostDetailsActivity extends AppCompatActivity {
         ParseFile image = post.getImage();
         if (image != null) {
             Glide.with(this).load(image.getUrl()).into(ivDetailMedia);
+        }
+
+        ParseFile profileImage = post.getUser().getParseFile("profileImage");
+        if (profileImage == null){
+            Glide.with(this).load(R.drawable.instagram_user_outline_24).into(ivProfileImageMedia);
+        }
+        else  {
+            Glide.with(this).load(profileImage.getUrl()).into(ivProfileImageMedia);
         }
 
     }
