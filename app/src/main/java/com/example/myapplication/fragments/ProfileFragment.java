@@ -40,6 +40,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +111,7 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 launchCamera();
                // ParseUser currentUser = ParseUser.getCurrentUser();
-                saveProfilePicture(photoFile);
+                //saveProfilePicture(photoFile);
             }
         });
 
@@ -145,7 +146,6 @@ public class ProfileFragment extends Fragment {
 
         try{
             if (getArguments().get("homeScreenBundle").equals("not null")) {
-                Log.i(TAG, "user clicked on someone's profile from the home screen");
                 query.whereEqualTo(Post.KEY_USER, getArguments().get("username"));
                 ParseUser user = (ParseUser) getArguments().get("username");
                 if(!ParseUser.getCurrentUser().getUsername().equals(user.getUsername())){
@@ -164,7 +164,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
+                    Log.e(TAG, "Issue with getting posts for profile view", e);
                     return;
                 }
                 for (Post post : posts) {
@@ -195,6 +195,7 @@ public class ProfileFragment extends Fragment {
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                saveProfilePicture(takenImage);
                 ivProfileImage.setImageBitmap(takenImage);
             } else { // Result was a failure
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
@@ -211,20 +212,25 @@ public class ProfileFragment extends Fragment {
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
     }
 
-    private void saveProfilePicture(File photoFile) {
+    // updates user's profile image to parse
+    private void saveProfilePicture(Bitmap photoFile) {
+        Log.d(TAG, String.valueOf(photoFile));
+        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        photoFile.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
 
-        ParseFile newProfileImage = new ParseFile(photoFile);
-        ParseUser.getCurrentUser().put("profileImage", newProfileImage);
+        ParseFile newProfileImage = new ParseFile(byteArrayOutputStream.toByteArray());
+        ParseUser parseUser=ParseUser.getCurrentUser();
+        parseUser.put("profileImage", newProfileImage);
 
-        newProfileImage.saveInBackground(new SaveCallback() {
+        parseUser.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e != null){
-                    Log.e(TAG, "Error while saving!", e);
+                    Log.e(TAG, "Error while saving post!", e);
                     Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
                 }
                 Log.i(TAG, "Post save was successful!");
-                ivProfileImage.setImageResource(0);
+                ivProfileImage.setImageBitmap(photoFile);
             }
         });
     }
