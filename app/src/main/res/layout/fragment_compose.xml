@@ -1,34 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".fragments.ComposeFragment">
 
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_above="@id/btnSubmit"
+        android:layout_below="@id/btnCaptureImage"
+        android:layout_marginBottom="0dp"
+        android:visibility="invisible" />
+
     <EditText
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:ems="10"
-        android:hint="Description..."/>
+        android:hint="Description..." />
 
     <Button
         android:id="@+id/btnCaptureImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/etDescription"
         android:text="Take Picture" />
 
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_below="@id/btnCaptureImage"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ivPostImage"
         android:text="Submit" />
 
-</LinearLayout>
+</RelativeLayout>

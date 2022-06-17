@@ -14,18 +14,27 @@
 
     <TextView
         android:id="@+id/tvUsername"
-        android:layout_width="match_parent"
+        android:layout_width="97dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/ivProfileImage"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="rahul" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <Button
+        android:id="@+id/btnProfileImage"
+        android:layout_width="235dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="33dp"
+        android:layout_toRightOf="@id/tvUsername"
+        android:text="Take New Profile Picture" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/ivProfileImage">
+        android:layout_below="@id/ivProfileImage"
+        android:layout_marginTop="0dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPosts"
@@ -33,6 +42,7 @@
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:padding="8dp" />
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

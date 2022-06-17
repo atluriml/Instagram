@@ -53,7 +53,7 @@ public class PostsFragment extends Fragment {
 
         // initialize the array that will hold posts and create a PostsAdapter
         allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts);
+        adapter = new PostsAdapter(getContext(), allPosts, getFragmentManager());
 
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);

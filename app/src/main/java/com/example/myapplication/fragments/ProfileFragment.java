@@ -46,22 +46,10 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
-//    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
-//    private Button btnCaptureImage;
-//    private ImageView ivProfileImage;
-//    private String photoFileName = "photo.jpg";
-//    private File photoFile;
-//
-//    @Override
-//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        btnCaptureImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                launchCamera();
-//            }
-//        });
-//    }
+    public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
+    private Button btnCaptureImage;
+    private String photoFileName = "photo.jpg";
+    private File photoFile;
 
 
     public static final String TAG = "ProfileFragment";
@@ -89,19 +77,42 @@ public class ProfileFragment extends Fragment {
         rvPosts = view.findViewById(R.id.rvPosts);
         tvProfileUsername = view.findViewById(R.id.tvUsername);
         ivProfileImage = view.findViewById(R.id.ivProfileImage);
+        btnCaptureImage = view.findViewById(R.id.btnProfileImage);
 
         // initialize the array that will hold posts and create a PostsAdapter
         allPosts = new ArrayList<>();
         adapter = new ProfileAdapter(getContext(), allPosts);
+        ParseFile profileImage = null;
 
-        tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
-        ParseFile profileImage = ParseUser.getCurrentUser().getParseFile("profileImage");
+        try{
+            if (getArguments().get("homeScreenBundle").equals("not null")) {
+            Log.i(TAG, "user clicked on someone's profile from the home screen");
+            ParseUser user = (ParseUser) getArguments().get("username");
+            tvProfileUsername.setText(user.getUsername());
+            profileImage = (ParseFile) getArguments().get("image");
+        }}
+        catch (Exception e) {
+            e.printStackTrace();
+                Log.i(TAG, "user did not click on someone's profile from the home screen");
+                tvProfileUsername.setText(ParseUser.getCurrentUser().getUsername());
+                profileImage = ParseUser.getCurrentUser().getParseFile("profileImage");
+        }
+
         if (profileImage == null){
             Glide.with(this).load(R.drawable.instagram_user_outline_24).into(ivProfileImage);
         }
         else  {
             Glide.with(this).load(profileImage.getUrl()).into(ivProfileImage);
         }
+
+        btnCaptureImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchCamera();
+               // ParseUser currentUser = ParseUser.getCurrentUser();
+                saveProfilePicture(photoFile);
+            }
+        });
 
         // set the adapter on the recycler view
         rvPosts.setAdapter(adapter);
@@ -131,7 +142,21 @@ public class ProfileFragment extends Fragment {
     protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+
+        try{
+            if (getArguments().get("homeScreenBundle").equals("not null")) {
+                Log.i(TAG, "user clicked on someone's profile from the home screen");
+                query.whereEqualTo(Post.KEY_USER, getArguments().get("username"));
+                ParseUser user = (ParseUser) getArguments().get("username");
+                if(!ParseUser.getCurrentUser().getUsername().equals(user.getUsername())){
+                    btnCaptureImage.setVisibility(View.GONE);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        }
+
         query.setLimit(20);
 
         query.addDescendingOrder("createdAt");
@@ -151,66 +176,57 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-//    private void launchCamera() {
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        // Create a File reference for future access
-//        photoFile = getPhotoFileUri(photoFileName);
-//
-//        // wrap File object into a content provider
-//        // required for API >= 24
-//        // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-//        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-//
-//        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
-//        // So as long as the result is not null, it's safe to use the intent.
-//        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-//            // Start the image capture intent to take photo
-//            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-//        }
-//
-//    }
-//
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-//            if (resultCode == RESULT_OK) {
-//                // by this point we have the camera photo on disk
-//                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-//                // RESIZE BITMAP, see section below
-//                // Load the taken image into a preview
-//                ivProfileImage.setImageBitmap(takenImage);
-//            } else { // Result was a failure
-//                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
-//
-//    // returns the File for a photo stored on disk given the fileName
-//    public File getPhotoFileUri(String fileName){
-//        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
-//        if(!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-//            Log.d(TAG, "failed to create directory");
-//        }
-//        return new File(mediaStorageDir.getPath() + File.separator + fileName);
-//    }
-//
-//    private void savePost(String description, ParseUser currentUser, File photoFile) {
-//        Post post = new Post();
-//        //post.getUser().getParseFile("profileImage").(new ParseFile(photoFile));
-//        post.setImage(new ParseFile(photoFile));
-//        post.saveInBackground(new SaveCallback() {
-//            @Override
-//            public void done(ParseException e) {
-//                if (e != null){
-//                    Log.e(TAG, "Error while saving!", e);
-//                    Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
-//                }
-//                Log.i(TAG, "Post save was successful!");
-//                ivProfileImage.setImageResource(0);
-//            }
-//        });
-//    }
+    private void launchCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = getPhotoFileUri(photoFileName);
+
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                ivProfileImage.setImageBitmap(takenImage);
+            } else { // Result was a failure
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // returns the File for a photo stored on disk given the fileName
+    public File getPhotoFileUri(String fileName){
+        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+        if(!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.d(TAG, "failed to create directory");
+        }
+        return new File(mediaStorageDir.getPath() + File.separator + fileName);
+    }
+
+    private void saveProfilePicture(File photoFile) {
+
+        ParseFile newProfileImage = new ParseFile(photoFile);
+        ParseUser.getCurrentUser().put("profileImage", newProfileImage);
+
+        newProfileImage.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null){
+                    Log.e(TAG, "Error while saving!", e);
+                    Toast.makeText(getContext(), "Error while saving!", Toast.LENGTH_SHORT).show();
+                }
+                Log.i(TAG, "Post save was successful!");
+                ivProfileImage.setImageResource(0);
+            }
+        });
+    }
 
 }

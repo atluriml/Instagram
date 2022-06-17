@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.fragments.ProfileFragment;
 import com.parse.ParseFile;
 
 import org.parceler.Parcels;
 
+import java.util.Date;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
@@ -24,10 +29,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     public static final String TAG = "PostsAdapter";
     private Context context;
     private List<Post> posts;
+    private FragmentManager fragmentManager;
 
-    public PostsAdapter(Context context, List<Post> posts) {
+    public PostsAdapter(Context context, List<Post> posts, FragmentManager fragmentManager) {
         this.context = context;
         this.posts = posts;
+        this.fragmentManager = fragmentManager;
     }
 
     @NonNull
@@ -54,6 +61,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public ImageView ivImage;
         public TextView tvDescription;
         public ImageView ivProfileImage;
+        public TextView tvDetailTimeStamp;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -61,8 +69,39 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivImage = itemView.findViewById(R.id.ivImage);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
+            tvDetailTimeStamp = itemView.findViewById(R.id.tvCreationTime);
 
             itemView.setOnClickListener(this);
+
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    Post post = posts.get(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("homeScreenBundle", "not null");
+                    bundle.putParcelable("username", post.getUser());
+                    bundle.putParcelable("image", post.getUser().getParseFile("profileImage"));
+                    Fragment fragment = new ProfileFragment();
+                    fragment.setArguments(bundle);
+                    fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                }
+            });
+
+            tvUsername.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    Post post = posts.get(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("homeScreenBundle", "not null");
+                    bundle.putParcelable("username", post.getUser());
+                    bundle.putParcelable("image", post.getUser().getParseFile("profileImage"));
+                    Fragment fragment = new ProfileFragment();
+                    fragment.setArguments(bundle);
+                    fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                }
+            });
 
         }
 
@@ -81,6 +120,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             else  {
                 Glide.with(context).load(profileImage.getUrl()).into(ivProfileImage);
             }
+            Date createdAt = post.getCreatedAt();
+            String timeAgo = Post.calculateTimeAgo(createdAt);
+            tvDetailTimeStamp.setText(timeAgo);
         }
 
         @Override

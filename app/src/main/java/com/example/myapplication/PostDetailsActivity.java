@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.myapplication.fragments.ProfileFragment;
 import com.parse.ParseFile;
 
 import org.parceler.Parcels;
@@ -59,6 +62,19 @@ public class PostDetailsActivity extends AppCompatActivity {
         else  {
             Glide.with(this).load(profileImage.getUrl()).into(ivProfileImageMedia);
         }
+
+//        tvDetailUser.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Bundle bundle = new Bundle();
+//                bundle.putString("homeScreenBundle", "not null");
+//                bundle.putParcelable("username", post.getUser());
+//                bundle.putParcelable("image", post.getUser().getParseFile("profileImage"));
+//                Fragment fragment = new ProfileFragment();
+//                fragment.setArguments(bundle);
+//                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+//            }
+//        });
 
     }
 
