@@ -6,8 +6,28 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_vector_compose.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_compose_dm.xml" value="0.2505" />
         <entry key="app/src/main/res/drawable/ic_vector_heart.xml" value="0.1775" />
         <entry key="app/src/main/res/drawable/ic_vector_heart_stroke.xml" value="0.1775" />
+        <entry key="app/src/main/res/drawable/ic_vector_home.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_location.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_location_stroke.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_messages.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_messages_stroke.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_notifications.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_notifications_stroke.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_person.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_person_stroke.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_photo.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_photo_stroke.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_retweet.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_retweet_stroke.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_search.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/ic_vector_search_stroke.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/vector_compose_dm_fab.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/vector_compose_fab.xml" value="0.2505" />
+        <entry key="app/src/main/res/drawable/vector_compose_shortcut.xml" value="0.2505" />
         <entry key="app/src/main/res/layout/activity_feed.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24644549763033174" />
         <entry key="app/src/main/res/layout/activity_login2.xml" value="0.1702127659574468" />
@@ -18,6 +38,7 @@
         <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.23174603174603176" />
         <entry key="app/src/main/res/layout/fragment_posts.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.2635416666666667" />
+        <entry key="app/src/main/res/layout/ic_vector_messages.xml" value="0.35104166666666664" />
         <entry key="app/src/main/res/layout/item_post.xml" value="0.369620253164557" />
         <entry key="app/src/main/res/layout/profile_post.xml" value="0.1765625" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.1" />
