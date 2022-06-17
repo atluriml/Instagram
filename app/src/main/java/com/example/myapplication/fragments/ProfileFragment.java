@@ -215,11 +215,11 @@ public class ProfileFragment extends Fragment {
     // updates user's profile image to parse
     private void saveProfilePicture(Bitmap photoFile) {
         Log.d(TAG, String.valueOf(photoFile));
-        ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         photoFile.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream);
 
         ParseFile newProfileImage = new ParseFile(byteArrayOutputStream.toByteArray());
-        ParseUser parseUser=ParseUser.getCurrentUser();
+        ParseUser parseUser = ParseUser.getCurrentUser();
         parseUser.put("profileImage", newProfileImage);
 
         parseUser.saveInBackground(new SaveCallback() {

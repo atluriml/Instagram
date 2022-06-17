@@ -7,6 +7,10 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 @ParseClassName("Post")
@@ -15,6 +19,9 @@ public class Post extends ParseObject {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
+    public static final String KEY_NUM_LIKES = "likesCount";
+    public static final String KEY_LIKED_USERS = "likedUsers";
+    public static final String KEY_IS_LIKED = "isFavorited";
 
     public String getDescription(){
         return getString(KEY_DESCRIPTION);
@@ -38,6 +45,50 @@ public class Post extends ParseObject {
 
     public void setUser (ParseUser user){
         put(KEY_USER, user);
+    }
+
+    public long getLikesCount(){
+        return getLong(KEY_NUM_LIKES);
+    }
+
+    public void setNumLikes(long numLikes){
+        put(KEY_NUM_LIKES, numLikes);
+    }
+
+    public JSONArray getLikedUsers() {
+        return getJSONArray(KEY_LIKED_USERS);
+    }
+
+    public void setLikedUsers(JSONArray jsonArray) {
+        put(KEY_LIKED_USERS, jsonArray);
+    }
+
+    public Boolean getIsLiked() {
+        return getBoolean(KEY_IS_LIKED);
+    }
+
+    public void setIsLiked(Boolean isLiked) {
+        put(KEY_IS_LIKED, isLiked);
+    }
+
+    public void likePost(ParseUser user){
+        add(KEY_LIKED_USERS, user.getObjectId());
+    }
+
+    public int returnPosition(JSONArray array, String id) throws JSONException {
+        for (int i = 0; i < array.length(); ++i){
+            if (array.getString(i).equals(id)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void unLikePost(ParseUser user, JSONArray array) throws JSONException {
+        String id = user.getObjectId();
+        int position = returnPosition(array, id);
+        array.remove(position);
+        setLikedUsers(array);
     }
 
     public static String calculateTimeAgo(Date createdAt) {

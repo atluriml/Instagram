@@ -2,11 +2,13 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,11 +20,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.fragments.ProfileFragment;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.Date;
 import java.util.List;
+
+import okhttp3.Headers;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
@@ -62,6 +70,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         public TextView tvDescription;
         public ImageView ivProfileImage;
         public TextView tvDetailTimeStamp;
+        public TextView tvLikesCount;
+        public ImageButton imBtnIsLiked;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,6 +80,8 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvDescription = itemView.findViewById(R.id.tvDescription);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvDetailTimeStamp = itemView.findViewById(R.id.tvCreationTime);
+            tvLikesCount = itemView.findViewById(R.id.tvLikesCount);
+            imBtnIsLiked = itemView.findViewById(R.id.isLiked);
 
             itemView.setOnClickListener(this);
 
@@ -102,6 +114,43 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 }
             });
+            imBtnIsLiked.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        Post post = posts.get(position);
+                        // user is liking tweet
+                        if (!post.getIsLiked()) {
+                            imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart);
+                            imBtnIsLiked.setColorFilter(Color.parseColor("#ffe0245e"));
+                            long likeCount = post.getLikesCount();
+
+                            post.setIsLiked(true);
+                            post.setNumLikes(likeCount + 1);
+                            post.likePost(ParseUser.getCurrentUser());
+                            post.saveInBackground();
+                        }
+                        // user is unliking tweet
+                        else {
+                            imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+                            imBtnIsLiked.setColorFilter(Color.parseColor("#000000"));
+
+                            long likeCount = post.getLikesCount();
+                            post.setIsLiked(false);
+                            try {
+                                post.unLikePost(ParseUser.getCurrentUser(), post.getLikedUsers());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            post.setNumLikes(likeCount - 1);
+                            post.saveInBackground();
+
+                        }
+                        tvLikesCount.setText( post.getLikesCount() + " Likes");
+                    }
+                }
+            });
 
         }
 
@@ -123,6 +172,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             Date createdAt = post.getCreatedAt();
             String timeAgo = Post.calculateTimeAgo(createdAt);
             tvDetailTimeStamp.setText(timeAgo);
+            if (post.getIsLiked()){
+                imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart);
+                imBtnIsLiked.setColorFilter(Color.parseColor("#ffe0245e"));
+            }
+            else{
+                imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+                imBtnIsLiked.setColorFilter(Color.parseColor("#000000"));
+            }
+            tvLikesCount.setText( post.getLikesCount() + " Likes");
         }
 
         @Override

@@ -6,6 +6,8 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_vector_heart.xml" value="0.1775" />
+        <entry key="app/src/main/res/drawable/ic_vector_heart_stroke.xml" value="0.1775" />
         <entry key="app/src/main/res/layout/activity_feed.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.24644549763033174" />
         <entry key="app/src/main/res/layout/activity_login2.xml" value="0.1702127659574468" />
@@ -16,7 +18,7 @@
         <entry key="app/src/main/res/layout/fragment_compose.xml" value="0.23174603174603176" />
         <entry key="app/src/main/res/layout/fragment_posts.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.2635416666666667" />
-        <entry key="app/src/main/res/layout/item_post.xml" value="0.1404095277893857" />
+        <entry key="app/src/main/res/layout/item_post.xml" value="0.369620253164557" />
         <entry key="app/src/main/res/layout/profile_post.xml" value="0.1765625" />
         <entry key="app/src/main/res/menu/menu_bottom_navigation.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu_main.xml" value="0.15460052490234377" />
