@@ -57,14 +57,18 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDetailUser.setText(post.getUser().getUsername());
         tvDetailComment.setText(post.getDescription());
         tvDetailTimeStamp.setText(timeAgo);
-        tvLikesCountDetail.setText(post.getLikesCount() + " likes");
-        if (post.getIsLiked()){
-            imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart);
-            imbtnIsLikedDetail.setColorFilter(Color.parseColor("#ffe0245e"));
-        }
-        else{
-            imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart_stroke);
-            imbtnIsLikedDetail.setColorFilter(Color.parseColor("#000000"));
+        tvLikesCountDetail.setText(post.getLikesCount(post.getLikedUsers()) + " likes");
+        try {
+            if (post.getIsLiked(post.getLikedUsers(), ParseUser.getCurrentUser().getObjectId())){
+                imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart);
+                imbtnIsLikedDetail.setColorFilter(Color.parseColor("#ffe0245e"));
+            }
+            else{
+                imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart_stroke);
+                imbtnIsLikedDetail.setColorFilter(Color.parseColor("#000000"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         imbtnIsLikedDetail.setOnClickListener(new View.OnClickListener() {
@@ -72,33 +76,32 @@ public class PostDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // user is liking tweet
-                if (!post.getIsLiked()) {
-                    imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart);
-                    imbtnIsLikedDetail.setColorFilter(Color.parseColor("#ffe0245e"));
-                    long likeCount = post.getLikesCount();
+                try {
+                    if (!post.getIsLiked(post.getLikedUsers(), ParseUser.getCurrentUser().getObjectId())) {
+                        imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart);
+                        imbtnIsLikedDetail.setColorFilter(Color.parseColor("#ffe0245e"));
+                        long likeCount = post.getLikesCount(post.getLikedUsers());
 
-                    post.setIsLiked(true);
-                    post.setNumLikes(likeCount + 1);
-                    post.likePost(ParseUser.getCurrentUser());
-                    post.saveInBackground();
-                }
-                // user is unliking tweet
-                else {
-                    imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart_stroke);
-                    imbtnIsLikedDetail.setColorFilter(Color.parseColor("#000000"));
-
-                    long likeCount = post.getLikesCount();
-                    post.setIsLiked(false);
-                    try {
-                        post.unLikePost(ParseUser.getCurrentUser(), post.getLikedUsers());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        post.likePost(ParseUser.getCurrentUser());
+                        post.saveInBackground();
                     }
-                    post.setNumLikes(likeCount - 1);
-                    post.saveInBackground();
+                    // user is unliking tweet
+                    else {
+                        imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart_stroke);
+                        imbtnIsLikedDetail.setColorFilter(Color.parseColor("#000000"));
 
+                        try {
+                            post.unLikePost(ParseUser.getCurrentUser(), post.getLikedUsers());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        post.saveInBackground();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                tvLikesCountDetail.setText(post.getLikesCount() + " likes");
+                tvLikesCountDetail.setText(post.getLikesCount(post.getLikedUsers()) + " likes");
             }
         });
 

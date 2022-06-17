@@ -53,8 +53,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)  {
         Post post = posts.get(position);
+
         holder.bind(post);
     }
 
@@ -121,33 +122,32 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     if (position != RecyclerView.NO_POSITION) {
                         Post post = posts.get(position);
                         // user is liking tweet
-                        if (!post.getIsLiked()) {
-                            imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart);
-                            imBtnIsLiked.setColorFilter(Color.parseColor("#ffe0245e"));
-                            long likeCount = post.getLikesCount();
-
-                            post.setIsLiked(true);
-                            post.setNumLikes(likeCount + 1);
-                            post.likePost(ParseUser.getCurrentUser());
-                            post.saveInBackground();
-                        }
-                        // user is unliking tweet
-                        else {
-                            imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
-                            imBtnIsLiked.setColorFilter(Color.parseColor("#000000"));
-
-                            long likeCount = post.getLikesCount();
-                            post.setIsLiked(false);
-                            try {
-                                post.unLikePost(ParseUser.getCurrentUser(), post.getLikedUsers());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                        try {
+                            if (!post.getIsLiked(post.getLikedUsers(), ParseUser.getCurrentUser().getObjectId())) {
+                                imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart);
+                                imBtnIsLiked.setColorFilter(Color.parseColor("#ffe0245e"));
+                                post.likePost(ParseUser.getCurrentUser());
+                                post.saveInBackground();
                             }
-                            post.setNumLikes(likeCount - 1);
-                            post.saveInBackground();
+                            // user is unliking tweet
+                            else {
+                                imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+                                imBtnIsLiked.setColorFilter(Color.parseColor("#000000"));
 
+
+                                try {
+                                    post.unLikePost(ParseUser.getCurrentUser(), post.getLikedUsers());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                post.saveInBackground();
+
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        tvLikesCount.setText( post.getLikesCount() + " Likes");
+                        tvLikesCount.setText( post.getLikesCount(post.getLikedUsers()) + " Likes");
                     }
                 }
             });
@@ -172,15 +172,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             Date createdAt = post.getCreatedAt();
             String timeAgo = Post.calculateTimeAgo(createdAt);
             tvDetailTimeStamp.setText(timeAgo);
-            if (post.getIsLiked()){
-                imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart);
-                imBtnIsLiked.setColorFilter(Color.parseColor("#ffe0245e"));
+            try {
+                if (post.getIsLiked(post.getLikedUsers(), ParseUser.getCurrentUser().getObjectId())){
+                    imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart);
+                    imBtnIsLiked.setColorFilter(Color.parseColor("#ffe0245e"));
+                }
+                else{
+                    imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
+                    imBtnIsLiked.setColorFilter(Color.parseColor("#000000"));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            else{
-                imBtnIsLiked.setImageResource(R.drawable.ic_vector_heart_stroke);
-                imBtnIsLiked.setColorFilter(Color.parseColor("#000000"));
-            }
-            tvLikesCount.setText( post.getLikesCount() + " Likes");
+            tvLikesCount.setText( post.getLikesCount(post.getLikedUsers()) + " Likes");
         }
 
         @Override

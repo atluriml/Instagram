@@ -19,9 +19,7 @@ public class Post extends ParseObject {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
-    public static final String KEY_NUM_LIKES = "likesCount";
     public static final String KEY_LIKED_USERS = "likedUsers";
-    public static final String KEY_IS_LIKED = "isFavorited";
 
     public String getDescription(){
         return getString(KEY_DESCRIPTION);
@@ -47,12 +45,8 @@ public class Post extends ParseObject {
         put(KEY_USER, user);
     }
 
-    public long getLikesCount(){
-        return getLong(KEY_NUM_LIKES);
-    }
-
-    public void setNumLikes(long numLikes){
-        put(KEY_NUM_LIKES, numLikes);
+    public long getLikesCount(JSONArray jsonArray){
+        return jsonArray.length();
     }
 
     public JSONArray getLikedUsers() {
@@ -63,13 +57,15 @@ public class Post extends ParseObject {
         put(KEY_LIKED_USERS, jsonArray);
     }
 
-    public Boolean getIsLiked() {
-        return getBoolean(KEY_IS_LIKED);
+    public Boolean getIsLiked(JSONArray jsonArray, String id) throws JSONException {
+        for (int i = 0; i < jsonArray.length(); ++i){
+            if (jsonArray.getString(i).equals(id)){
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void setIsLiked(Boolean isLiked) {
-        put(KEY_IS_LIKED, isLiked);
-    }
 
     public void likePost(ParseUser user){
         add(KEY_LIKED_USERS, user.getObjectId());
