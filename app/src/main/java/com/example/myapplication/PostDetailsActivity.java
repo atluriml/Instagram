@@ -57,6 +57,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvDetailUser.setText(post.getUser().getUsername());
         tvDetailComment.setText(post.getDescription());
         tvDetailTimeStamp.setText(timeAgo);
+        tvLikesCountDetail.setText(post.getLikesCount() + " likes");
         if (post.getIsLiked()){
             imbtnIsLikedDetail.setImageResource(R.drawable.ic_vector_heart);
             imbtnIsLikedDetail.setColorFilter(Color.parseColor("#ffe0245e"));
