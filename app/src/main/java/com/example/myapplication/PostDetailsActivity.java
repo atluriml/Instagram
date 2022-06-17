@@ -63,19 +63,6 @@ public class PostDetailsActivity extends AppCompatActivity {
             Glide.with(this).load(profileImage.getUrl()).into(ivProfileImageMedia);
         }
 
-//        tvDetailUser.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Bundle bundle = new Bundle();
-//                bundle.putString("homeScreenBundle", "not null");
-//                bundle.putParcelable("username", post.getUser());
-//                bundle.putParcelable("image", post.getUser().getParseFile("profileImage"));
-//                Fragment fragment = new ProfileFragment();
-//                fragment.setArguments(bundle);
-//                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
-//            }
-//        });
-
     }
 
 }
